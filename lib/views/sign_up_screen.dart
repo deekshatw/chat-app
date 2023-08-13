@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:my_chat_app/services/auth.dart';
+import 'package:my_chat_app/views/chatrooms_screen.dart';
 import 'package:my_chat_app/widgets/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +32,9 @@ class _SignUnScreenState extends State<SignUnScreen> {
           .signUpwithEmailAndPassword(emailTextEditingController.text,
               passwordTextEditingController.text)
           .then((value) {
-        print(value);
+        print(value.userId);
+        Navigator.pushReplacement(context as BuildContext,
+            MaterialPageRoute(builder: (context) => const ChatroomsScreen()));
       });
     }
   }
