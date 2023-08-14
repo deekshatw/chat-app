@@ -1,4 +1,4 @@
-import 'package:my_chat_app/views/sign_up_screen.dart';
+import 'package:my_chat_app/helper/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF145C9E)),
         useMaterial3: true,
       ),
-      home: const SignUnScreen(),
+      home: const Authenticate(),
     );
   }
 }

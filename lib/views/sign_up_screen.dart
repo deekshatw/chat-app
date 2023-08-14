@@ -5,14 +5,16 @@ import 'package:my_chat_app/views/chatrooms_screen.dart';
 import 'package:my_chat_app/widgets/widget.dart';
 import 'package:flutter/material.dart';
 
-class SignUnScreen extends StatefulWidget {
-  const SignUnScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  final Function toggle;
+
+  const SignUpScreen({super.key, required this.toggle});
 
   @override
-  State<SignUnScreen> createState() => _SignUnScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUnScreenState extends State<SignUnScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   AuthMethods authMethods = AuthMethods();
   final formKey = GlobalKey<FormState>();
@@ -33,7 +35,7 @@ class _SignUnScreenState extends State<SignUnScreen> {
               passwordTextEditingController.text)
           .then((value) {
         print(value.userId);
-        Navigator.pushReplacement(context as BuildContext,
+        Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const ChatroomsScreen()));
       });
     }
@@ -65,6 +67,7 @@ class _SignUnScreenState extends State<SignUnScreen> {
                             controller: usernameTextEditingController,
                             style: const TextStyle(color: Colors.white),
                             decoration: textFieldInputDecoration('Username'),
+                            keyboardType: TextInputType.text,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
@@ -78,6 +81,7 @@ class _SignUnScreenState extends State<SignUnScreen> {
                             controller: emailTextEditingController,
                             style: const TextStyle(color: Colors.white),
                             decoration: textFieldInputDecoration('Email'),
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
@@ -89,6 +93,7 @@ class _SignUnScreenState extends State<SignUnScreen> {
                             controller: passwordTextEditingController,
                             style: const TextStyle(color: Colors.white),
                             decoration: textFieldInputDecoration('Password'),
+                            keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
                           ),
                           const SizedBox(height: 8),
@@ -104,6 +109,7 @@ class _SignUnScreenState extends State<SignUnScreen> {
                             style: const TextStyle(color: Colors.white),
                             decoration: textFieldInputDecoration('Re-Password'),
                             obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
                           ),
                         ],
                       ),
@@ -154,7 +160,9 @@ class _SignUnScreenState extends State<SignUnScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.toggle();
+                          },
                           child: const Text(
                             'Login',
                             style: TextStyle(

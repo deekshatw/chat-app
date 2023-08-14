@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat_app/helper/authenticate.dart';
 import 'package:my_chat_app/services/auth.dart';
-import 'package:my_chat_app/views/sign_up_screen.dart';
 
 class ChatroomsScreen extends StatelessWidget {
   const ChatroomsScreen({super.key});
@@ -16,13 +16,11 @@ class ChatroomsScreen extends StatelessWidget {
           IconButton(
             onPressed: () {
               authMethods.signOut();
-              Navigator.pushReplacementNamed(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) {
-                      return const SignUnScreen();
-                    },
-                  ) as String);
+                    builder: (context) => const Authenticate(),
+                  ));
             },
             icon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
@@ -31,7 +29,8 @@ class ChatroomsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(child: Text('hello world')),
+      floatingActionButton:
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
     );
   }
 }
