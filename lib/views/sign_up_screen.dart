@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:my_chat_app/services/auth.dart';
+import 'package:my_chat_app/services/database.dart';
 import 'package:my_chat_app/views/chatrooms_screen.dart';
 import 'package:my_chat_app/widgets/widget.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   AuthMethods authMethods = AuthMethods();
+  DatabaseMethods databaseMethods = DatabaseMethods();
   final formKey = GlobalKey<FormState>();
   TextEditingController usernameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
@@ -26,6 +28,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   signMeUp() {
     if (formKey.currentState!.validate()) {
+      Map<String, String> userInfoMap = {
+        'username': usernameTextEditingController.text,
+        'email': emailTextEditingController.text
+      };
       setState(() {
         isLoading = true;
       });
@@ -34,7 +40,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           .signUpwithEmailAndPassword(emailTextEditingController.text,
               passwordTextEditingController.text)
           .then((value) {
-        print(value.userId);
+        // print(value.userId);
+
+        databaseMethods.uploadUserInfoToFirestore(userInfoMap);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const ChatroomsScreen()));
       });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_app/helper/authenticate.dart';
 import 'package:my_chat_app/services/auth.dart';
+import 'package:my_chat_app/views/search_screen.dart';
 
 class ChatroomsScreen extends StatelessWidget {
   const ChatroomsScreen({super.key});
@@ -29,8 +30,15 @@ class ChatroomsScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton:
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: ((context) => const SearchScreen())));
+        },
+        child: const Icon(
+          Icons.search,
+        ),
+      ),
     );
   }
 }

@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF145C9E),
         scaffoldBackgroundColor: const Color(0xFF1F1F1F),
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF145C9E)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF145C9E)),
         useMaterial3: true,
       ),
       home: const Authenticate(),
