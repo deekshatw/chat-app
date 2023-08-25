@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_chat_app/helper/helper_functions.dart';
 import 'package:my_chat_app/services/auth.dart';
+import 'package:my_chat_app/services/database.dart';
 import 'package:my_chat_app/views/chatrooms_screen.dart';
 import 'package:my_chat_app/widgets/widget.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +18,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
-
   final formKey = GlobalKey<FormState>();
   AuthMethods authMethods = AuthMethods();
+  DatabaseMethods databaseMethods = DatabaseMethods();
+  QuerySnapshot<Object?>? userInfoSnapshot;
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
 
@@ -26,11 +30,22 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = true;
       });
+      HelperFunctions.saveUserEmailSharedPreference(
+          emailTextEditingController.text);
+      databaseMethods
+          .getUserByEmail(emailTextEditingController.text)
+          .then((val) {
+        userInfoSnapshot = val;
+        HelperFunctions.saveUsernameSharedPreference(
+            (userInfoSnapshot?.docs[0].data() as dynamic)?['username']);
+      });
+
       authMethods
           .signInWithEmailAndPassword(emailTextEditingController.text,
               passwordTextEditingController.text)
           .then((val) {
         print('$val');
+        HelperFunctions.saveUserLoggedInSharedPreference(true);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const ChatroomsScreen()));
       });
@@ -64,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     : 'Please provide a valid email';
                               },
                               controller: emailTextEditingController,
+                              keyboardType: TextInputType.emailAddress,
                               style: const TextStyle(color: Colors.white),
                               decoration: textFieldInputDecoration('Email'),
                             ),

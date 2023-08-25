@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:my_chat_app/helper/helper_functions.dart';
 import 'package:my_chat_app/services/auth.dart';
 import 'package:my_chat_app/services/database.dart';
 import 'package:my_chat_app/views/chatrooms_screen.dart';
@@ -32,6 +33,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'username': usernameTextEditingController.text,
         'email': emailTextEditingController.text
       };
+
+      HelperFunctions.saveUsernameSharedPreference(
+          usernameTextEditingController.text);
+
+      HelperFunctions.saveUserEmailSharedPreference(
+          emailTextEditingController.text);
+
       setState(() {
         isLoading = true;
       });
@@ -41,7 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               passwordTextEditingController.text)
           .then((value) {
         // print(value.userId);
-
+        HelperFunctions.saveUserLoggedInSharedPreference(true);
         databaseMethods.uploadUserInfoToFirestore(userInfoMap);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const ChatroomsScreen()));

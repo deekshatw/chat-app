@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
-class ConversationScreen extends StatelessWidget {
+class ConversationScreen extends StatefulWidget {
   const ConversationScreen({super.key});
 
   @override
+  State<ConversationScreen> createState() => _ConversationScreenState();
+}
+
+class _ConversationScreenState extends State<ConversationScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Deeksha'),
+      ),
+    );
   }
 }

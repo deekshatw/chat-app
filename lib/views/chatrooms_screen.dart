@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_app/helper/authenticate.dart';
+import 'package:my_chat_app/helper/constants.dart';
+import 'package:my_chat_app/helper/helper_functions.dart';
 import 'package:my_chat_app/services/auth.dart';
 import 'package:my_chat_app/views/search_screen.dart';
 
-class ChatroomsScreen extends StatelessWidget {
+class ChatroomsScreen extends StatefulWidget {
   const ChatroomsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    AuthMethods authMethods = AuthMethods();
+  State<ChatroomsScreen> createState() => _ChatroomsScreenState();
+}
 
+class _ChatroomsScreenState extends State<ChatroomsScreen> {
+  AuthMethods authMethods = AuthMethods();
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async {
+    Constants.myName = (await HelperFunctions.getUsernameSharedPreference())!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chatrooms'),
