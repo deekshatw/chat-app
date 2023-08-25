@@ -26,4 +26,23 @@ class DatabaseMethods {
         .doc(chatroomId)
         .set(chatroomMap);
   }
+
+  addConversationMessages(String chatroomId, messageMap) {
+    FirebaseFirestore.instance
+        .collection('chatroom')
+        .doc(chatroomId)
+        .collection('chats')
+        .add(messageMap)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  getConversationMessages(String chatroomId) async {
+    return await FirebaseFirestore.instance
+        .collection('chatroom')
+        .doc(chatroomId)
+        .collection('chats')
+        .snapshots();
+  }
 }
