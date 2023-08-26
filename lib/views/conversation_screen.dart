@@ -29,27 +29,40 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   Widget ChatMessageList() {
-    return StreamBuilder(
-        stream: chatMessagesStream,
-        builder: (context, snapshot) {
-          return ListView.builder(
-              itemCount: snapshot.data?.docs.length,
-              itemBuilder: (context, index) {
-                return MessageTile(
-                  message:
-                      (snapshot.data?.docs[index].data() as dynamic)['message'],
-                  sendByMe: Constants.myName ==
-                      (snapshot.data?.docs[index].data() as dynamic)['sendBy'],
-                );
-              });
-        });
+    return StreamBuilder<QuerySnapshot<Object?>>(
+      stream: chatMessagesStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data == null) {
+          return Center(child: Text('No messages available'));
+        }
+
+        final messages = snapshot.data!.docs;
+        return ListView.builder(
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
+            final dynamic data = messages[index].data();
+            final String message = (data != null) ? data['message'] : '';
+            final bool sendByMe = Constants.myName == data['sendBy'];
+
+            return MessageTile(
+              message: message,
+              sendByMe: sendByMe,
+            );
+          },
+        );
+      },
+    );
   }
 
   sendMessage() {
     if (messageController.text.isNotEmpty) {
-      Map<String, String> messageMap = {
+      Map<String, dynamic> messageMap = {
         'message': messageController.text,
-        'sendBy': Constants.myName
+        'sendBy': Constants.myName,
+        'time': DateTime.now().millisecondsSinceEpoch,
       };
       databaseMethods.addConversationMessages(widget.chatroomId, messageMap);
       messageController.text = '';
@@ -119,10 +132,37 @@ class MessageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(
-        message,
-        style: TextStyle(
-          color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 10,
+        ),
+        margin: EdgeInsets.symmetric(
+          vertical: 6,
+          horizontal: 16,
+        ),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: sendByMe
+                  ? [Color(0xff007ef4), Color(0xff2a75bc)]
+                  : [Color(0x1AFFFFFF), Color(0x1AFFFFFF)],
+            ),
+            borderRadius: sendByMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomLeft: Radius.circular(23),
+                  )
+                : BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomRight: Radius.circular(23),
+                  )),
+        child: Text(
+          message,
+          style: TextStyle(color: Colors.white, fontSize: 17),
         ),
       ),
     );

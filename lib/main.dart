@@ -29,12 +29,13 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  getLoggedInState() async {
-    await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
+  Future<void> getLoggedInState() async {
+    bool? value = await HelperFunctions.getUserLoggedInSharedPreference();
+    if (value != null) {
       setState(() {
-        isUserLoggedIn = value!;
+        isUserLoggedIn = value;
       });
-    });
+    }
   }
 
   // This widget is the root of your application.
